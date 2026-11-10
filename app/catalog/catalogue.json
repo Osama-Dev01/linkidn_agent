@@ -1,0 +1,1043 @@
+{
+  "version": "1.0.0",
+  "fields": [
+    {
+      "field": "topic_interests/primary_topics",
+      "category": "topic_interests",
+      "description": "Core subjects to prioritize during discovery",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.primary_topics",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No inferred topic list; use explicit audience/themes provisionally",
+      "interpretation": "\u201cFocus my future posts on RAG\u201d supports adding RAG; one selection does not."
+    },
+    {
+      "field": "topic_interests/secondary_topics",
+      "category": "topic_interests",
+      "description": "Related subjects allowed with lower priority",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.secondary_topics",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No secondary boost",
+      "interpretation": "\u201cOccasionally cover databases\u201d supports a secondary interest, not a primary one."
+    },
+    {
+      "field": "topic_interests/hard_excluded_topics",
+      "category": "topic_interests",
+      "description": "Subjects explicitly prohibited from suggestions and drafts",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.hard_excluded_topics",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No additional user exclusions",
+      "interpretation": "\u201cNever cover crypto\u201d applies only to the identified topic; clarify what \u201cthis\u201d means."
+    },
+    {
+      "field": "topic_interests/soft_excluded_topics",
+      "category": "topic_interests",
+      "description": "Subjects to deprioritize rather than prohibit",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.soft_excluded_topics",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No soft penalties",
+      "interpretation": "\u201cLess career content in future\u201d can deprioritize career; a skipped card alone is weak evidence."
+    },
+    {
+      "field": "topic_interests/search_keywords",
+      "category": "topic_interests",
+      "description": "Reusable topic-search seeds",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.search_keywords",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "Derive temporary queries from the current brief",
+      "interpretation": "Generated search queries are run artifacts, not automatically saved preferences."
+    },
+    {
+      "field": "topic_interests/freshness",
+      "category": "topic_interests",
+      "description": "Preference for timely developments versus durable subjects",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Timely",
+          "Evergreen",
+          "Balanced"
+        ]
+      },
+      "direct_source": "interests.freshness",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "Balanced",
+      "interpretation": "A request for today's news can be local; evergreen does not mean use outdated facts."
+    },
+    {
+      "field": "topic_interests/recency_window",
+      "category": "topic_interests",
+      "description": "Maximum age in days for topical discovery when applicable",
+      "value_schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 3650
+      },
+      "direct_source": "interests.recency_window",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No fixed cutoff; use topic-appropriate freshness",
+      "interpretation": "\u201cUse announcements from the last 14 days\u201d supports 14 only within the stated scope."
+    },
+    {
+      "field": "topic_interests/repeat_policy",
+      "category": "topic_interests",
+      "description": "Conditions under which previously covered subjects may recur",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Avoid repeats",
+          "Allow a new angle",
+          "Allow substantial updates"
+        ]
+      },
+      "direct_source": "preferences.repeat_policy",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "Allow a new angle",
+      "interpretation": "\u201cWe covered this\u201d triggers history review; it does not establish a permanent ban."
+    },
+    {
+      "field": "topic_interests/cooldown_days",
+      "category": "topic_interests",
+      "description": "Minimum elapsed days before revisiting a subject",
+      "value_schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 3650
+      },
+      "direct_source": "preferences.cooldown_days",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3; exclusions also checked at S7",
+      "fallback_guidance": "No fixed interval; still check duplication",
+      "interpretation": "Do not derive an exact day count from vague \u201ctoo repetitive\u201d feedback."
+    },
+    {
+      "field": "selection_taste/practical_vs_conceptual",
+      "category": "selection_taste",
+      "description": "Preference for implementation-oriented versus conceptual topics",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Practical",
+          "Conceptual",
+          "Balanced"
+        ]
+      },
+      "direct_source": null,
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S2",
+      "fallback_guidance": "Balanced",
+      "interpretation": "Practical topics need not be beginner-level."
+    },
+    {
+      "field": "selection_taste/substance_vs_hype",
+      "category": "selection_taste",
+      "description": "Preference for deep topics versus announcements",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Deep topics",
+          "Announcements",
+          "Balanced"
+        ]
+      },
+      "direct_source": null,
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S2",
+      "fallback_guidance": "Balanced",
+      "interpretation": "Treat this as depth versus announcement focus; announcements are not inherently hype or low quality."
+    },
+    {
+      "field": "selection_taste/content_focus",
+      "category": "selection_taste",
+      "description": "Kinds of subject matter to favor in ranking",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Tools",
+            "Research",
+            "Career",
+            "Architecture",
+            "Industry opinions"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": null,
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S2",
+      "fallback_guidance": "No extra focus boost",
+      "interpretation": "\u201cMore architecture topics\u201d adds Architecture; it does not select a post format."
+    },
+    {
+      "field": "selection_taste/audience_level_of_topic",
+      "category": "selection_taste",
+      "description": "Difficulty of candidate topics for the intended readers",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Beginner",
+          "Intermediate",
+          "Advanced",
+          "Mixed"
+        ]
+      },
+      "direct_source": null,
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S2",
+      "fallback_guidance": "Use confirmed audience context; otherwise Mixed",
+      "interpretation": "A user's expertise does not establish reader expertise; do not copy audience_level without confirming equal meaning."
+    },
+    {
+      "field": "content_types/preferred_types",
+      "category": "content_types",
+      "description": "Post formats to prioritize",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Tutorial",
+            "Explainer",
+            "News analysis",
+            "Opinion",
+            "Case study",
+            "Project breakdown",
+            "Personal lesson",
+            "Research summary",
+            "Tool comparison",
+            "Prediction"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.preferred_content_types",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S1\u2013S3 and S5",
+      "fallback_guidance": "Choose an appropriate schema-supported type from the brief",
+      "interpretation": "This is a preference list, not an enabled/disabled permission list."
+    },
+    {
+      "field": "angles/preferred_angles",
+      "category": "angles",
+      "description": "Ways of framing a subject to favor",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Implementation lessons",
+            "Trade-offs",
+            "Failures",
+            "Practical applications",
+            "Critical analysis",
+            "Contrarian",
+            "Behind the scenes",
+            "Myth-busting",
+            "Trend with take"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.preferred_angles",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S2\u2013S3, S5\u2013S7",
+      "fallback_guidance": "Choose from evidence and audience needs",
+      "interpretation": "\u201cMore trade-offs in future\u201d may add Trade-offs without removing other angles."
+    },
+    {
+      "field": "angles/default_speaker_role",
+      "category": "angles",
+      "description": "Default rhetorical perspective, bounded by actual experience",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Practitioner",
+          "Learner",
+          "Critic",
+          "Observer"
+        ]
+      },
+      "direct_source": "identity.default_speaker_role",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S2\u2013S3, S5\u2013S7",
+      "fallback_guidance": "Use confirmed expertise per topic; otherwise Observer",
+      "interpretation": "Practitioner does not authorize invented hands-on experience; interest alone is insufficient."
+    },
+    {
+      "field": "research_preferences/research_depth",
+      "category": "research_preferences",
+      "description": "Amount of research effort for the task",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Quick overview",
+          "Standard",
+          "Deep research"
+        ]
+      },
+      "direct_source": "preferences.research_depth",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S4 and S7; citation placement also S6",
+      "fallback_guidance": "Standard",
+      "interpretation": "A depth selected for one topic is local unless explicitly saved as a default."
+    },
+    {
+      "field": "research_preferences/preferred_sources",
+      "category": "research_preferences",
+      "description": "Named sources or domains to prioritize",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "interests.preferred_sources",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S4 and S7; citation placement also S6",
+      "fallback_guidance": "Choose relevant primary sources",
+      "interpretation": "Prefer a source, but still assess the individual claim; preserve source identity rather than guessed URLs."
+    },
+    {
+      "field": "research_preferences/preferred_evidence",
+      "category": "research_preferences",
+      "description": "Evidence categories to favor",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Official documentation",
+            "Research papers",
+            "First-hand reports",
+            "Reproducible tests",
+            "Reputable reporting"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.preferred_evidence",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S4 and S7; citation placement also S6",
+      "fallback_guidance": "Official documentation; Research papers; Reproducible tests, where relevant",
+      "interpretation": "Evidence categories are not named sources; first-hand user experiences remain separate knowledge."
+    },
+    {
+      "field": "research_preferences/uncertain_claims",
+      "category": "research_preferences",
+      "description": "Treatment of uncertain claims that can responsibly be qualified",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Omit",
+          "Include with qualification"
+        ]
+      },
+      "direct_source": "preferences.uncertain_claims",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S4 and S7; citation placement also S6",
+      "fallback_guidance": "Omit",
+      "interpretation": "Qualification cannot rescue invented biography or a central unsupported claim; hold or reframe if necessary."
+    },
+    {
+      "field": "research_preferences/citations",
+      "category": "research_preferences",
+      "description": "Placement of public source references",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Inline references",
+          "Sources at end",
+          "Decide per post"
+        ]
+      },
+      "direct_source": "preferences.citations",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S4 and S7; citation placement also S6",
+      "fallback_guidance": "Sources at end",
+      "interpretation": "Internal evidence records remain mandatory where relevant regardless of public display."
+    },
+    {
+      "field": "outline_preferences/preferred_organisation",
+      "category": "outline_preferences",
+      "description": "Preferred arrangement of the argument",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Problem to solution",
+            "Story to lesson",
+            "Step-by-step",
+            "Claim to evidence",
+            "Comparison"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.preferred_organisation",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S5\u2013S7",
+      "fallback_guidance": "Choose the structure suited to the brief",
+      "interpretation": "Example first is not an Organisation enum value; do not invent an enum or a destination."
+    },
+    {
+      "field": "voice/tone",
+      "category": "voice",
+      "description": "Expressive qualities of the writing",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Professional",
+            "Conversational",
+            "Thoughtful",
+            "Direct",
+            "Curious",
+            "Witty",
+            "Encouraging"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.tone",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "Professional; Conversational",
+      "interpretation": "\u201cMore conversational\u201d need not mean Casual formality or Low technical depth."
+    },
+    {
+      "field": "voice/formality",
+      "category": "voice",
+      "description": "How casual or formal the wording sounds",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Casual",
+          "Balanced",
+          "Formal"
+        ]
+      },
+      "direct_source": "preferences.formality",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "Balanced",
+      "interpretation": "\u201cToo formal here\u201d is local; \u201call my posts\u201d is lasting."
+    },
+    {
+      "field": "voice/point_of_view",
+      "category": "voice",
+      "description": "Grammatical perspective used when appropriate",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "First person",
+          "Third person",
+          "Depends on content"
+        ]
+      },
+      "direct_source": "preferences.point_of_view",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "Depends on content",
+      "interpretation": "First person does not authorize fabricated I/we experiences."
+    },
+    {
+      "field": "voice/technical_depth",
+      "category": "voice",
+      "description": "Complexity and assumed background in the explanation",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Accessible",
+          "Moderately technical",
+          "Deeply technical",
+          "Adapt to audience"
+        ]
+      },
+      "direct_source": "preferences.technical_depth",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "Adapt to audience",
+      "interpretation": "Different from topic difficulty and amount of detail; do not update all three from \u201ctoo basic.\u201d"
+    },
+    {
+      "field": "voice/voice_instructions",
+      "category": "voice",
+      "description": "Additional user-authored voice guidance not adequately represented by structured fields",
+      "value_schema": {
+        "type": "string"
+      },
+      "direct_source": "preferences.voice_instructions",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "No additional instructions",
+      "interpretation": "Extract specific settings separately; never replace this text with an unconfirmed LLM-generated style card."
+    },
+    {
+      "field": "openings/preferred_opening",
+      "category": "openings",
+      "description": "Preferred kinds of opening",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Direct statement",
+            "Question",
+            "Personal observation",
+            "Problem",
+            "Evidence-backed fact"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.preferred_opening",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S5\u2013S7",
+      "fallback_guidance": "Choose an appropriate nonrepetitive opening",
+      "interpretation": "A removed question is evidence about that edit, not an automatic global question ban."
+    },
+    {
+      "field": "endings/closing_style",
+      "category": "endings",
+      "description": "Preferred ending types",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Practical takeaway",
+            "Open question",
+            "Summary",
+            "Call to action",
+            "No fixed closing"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.closing_style",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S5\u2013S7",
+      "fallback_guidance": "Practical takeaway",
+      "interpretation": "A tutorial-only instruction is not global. This schema has no persistent content-type overrides."
+    },
+    {
+      "field": "formatting/lists",
+      "category": "formatting",
+      "description": "Preference for list formatting",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "Prefer",
+          "When helpful",
+          "Avoid"
+        ]
+      },
+      "direct_source": "preferences.lists",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "When helpful",
+      "interpretation": "A bulleted sample is not proof that every post needs a list."
+    },
+    {
+      "field": "formatting/emojis",
+      "category": "formatting",
+      "description": "Frequency of emoji use",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Occasional",
+          "Frequent"
+        ]
+      },
+      "direct_source": "preferences.emojis",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "None",
+      "interpretation": "Absence in samples is weak evidence; explicit \u201cnever use emojis\u201d is decisive."
+    },
+    {
+      "field": "formatting/hashtags",
+      "category": "formatting",
+      "description": "Whether and how hashtags should be selected",
+      "value_schema": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Limited",
+          "Automatic"
+        ]
+      },
+      "direct_source": "preferences.hashtags",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "None",
+      "interpretation": "Automatic means relevant selection, not unlimited quantity or a publishing permission."
+    },
+    {
+      "field": "formatting/hashtag_max",
+      "category": "formatting",
+      "description": "Maximum number of hashtags",
+      "value_schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 30
+      },
+      "direct_source": "preferences.hashtag_max",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "3 if hashtags are enabled",
+      "interpretation": "0 is a valid explicit value; count must remain below any separate platform limit."
+    },
+    {
+      "field": "anti_style/avoided_patterns",
+      "category": "anti_style",
+      "description": "Specific structures or rhetorical habits to avoid",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.avoided_patterns",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "No additional user patterns",
+      "interpretation": "\u201cNever use fake suspense openings\u201d adds a pattern; keep it specific and actionable."
+    },
+    {
+      "field": "anti_style/avoided_phrases",
+      "category": "anti_style",
+      "description": "Exact words or phrases the user does not want",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "uniqueItems": true
+      },
+      "direct_source": "preferences.avoided_phrases",
+      "learning_policy": "confirm_inference",
+      "operations": [
+        "set",
+        "add",
+        "remove"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "No additional user phrases",
+      "interpretation": "Preserve wording; distinguish an exact phrase ban from banning every synonym."
+    },
+    {
+      "field": "anti_style/additional_restrictions",
+      "category": "anti_style",
+      "description": "Other explicit editorial restrictions not represented elsewhere",
+      "value_schema": {
+        "type": "string"
+      },
+      "direct_source": "preferences.additional_restrictions",
+      "learning_policy": "explicit_only",
+      "operations": [
+        "set"
+      ],
+      "persistent_scopes": [
+        "future_posts"
+      ],
+      "temporary_scopes": [
+        "this_post"
+      ],
+      "used_by": "S6\u2013S7",
+      "fallback_guidance": "No additional editorial restrictions",
+      "interpretation": "Route privacy, personal facts and publishing controls elsewhere; never use this as a catch-all for unsupported fields."
+    }
+  ]
+}
